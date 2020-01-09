@@ -3,10 +3,14 @@ package com.il.henrysgrocery.service;
 import com.il.henrysgrocery.domain.Basket;
 import com.il.henrysgrocery.domain.BasketItem;
 import com.il.henrysgrocery.domain.Product;
+import com.il.henrysgrocery.domain.discounts.AppleDiscount;
+import com.il.henrysgrocery.domain.discounts.Discountable;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -16,10 +20,14 @@ public class BasketCalculatorTest {
 
     private BasketCalculator calculator;
 
+    private List<Discountable> discountableList;
+
     @Before
     public void setup() {
+        discountableList = new ArrayList<>();
+        discountableList.add(new AppleDiscount());
         basket = new Basket();
-        calculator = new BasketCalculator();
+        calculator = new BasketCalculator(discountableList);
     }
 
     @Test
@@ -73,7 +81,7 @@ public class BasketCalculatorTest {
     @Test
     public void calculatesBasketTotalCorrectlyWithApplesAndMilk() {
 
-        BigDecimal expectedTotal = new BigDecimal("1.90");
+        BigDecimal expectedTotal = new BigDecimal("1.84");
 
         BasketItem item1 = new BasketItem(Product.APPLES, 6);
         BasketItem item2 = new BasketItem(Product.MILK, 1);
@@ -87,7 +95,7 @@ public class BasketCalculatorTest {
     @Test
     public void calculatesBasketTotalCorrectlyWithApplesSoupAndBread() {
 
-        BigDecimal expectedTotal = new BigDecimal("2.40");
+        BigDecimal expectedTotal = new BigDecimal("2.37");
 
         BasketItem item1 = new BasketItem(Product.APPLES, 3);
         BasketItem item2 = new BasketItem(Product.SOUP, 2);

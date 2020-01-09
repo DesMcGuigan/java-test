@@ -17,7 +17,16 @@ public class Basket {
         return this;
     }
 
+    public Basket remove(Product product) {
+        basketItems.removeIf(item->item.getProduct().equals(product));
+        return this;
+    }
+
     public BigDecimal total() {
         return basketItems.stream().map(item -> item.getProduct().getCost().multiply(new BigDecimal(item.getQuantity()))).reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public List<BasketItem> getBasketItems() {
+        return basketItems;
     }
 }
