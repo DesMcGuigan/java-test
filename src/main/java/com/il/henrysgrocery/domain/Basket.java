@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Grocery Basket
@@ -16,7 +17,7 @@ public class Basket {
     private LocalDate purchaseDate;
 
     public Basket(LocalDate purchaseDate) {
-        this.purchaseDate = purchaseDate;
+        this.purchaseDate = Objects.requireNonNull(purchaseDate, "Purchase date must not be null");
     }
 
     public Basket add(BasketItem basketItem) {

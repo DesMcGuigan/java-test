@@ -12,8 +12,12 @@ public class BasketItem {
     private final int quantity;
 
     public BasketItem(Product product, int quantity) {
-        this.product = product;
-        this.quantity = quantity;
+        this.product = Objects.requireNonNull(product, "Product must not be null");
+        if (quantity > 0) {
+            this.quantity = quantity;
+        } else {
+            throw new IllegalArgumentException("quantity must be greater than zero");
+        }
     }
 
     public Product getProduct() {
