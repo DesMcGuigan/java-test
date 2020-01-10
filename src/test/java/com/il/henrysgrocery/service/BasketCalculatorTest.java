@@ -4,6 +4,7 @@ import com.il.henrysgrocery.domain.Basket;
 import com.il.henrysgrocery.domain.BasketItem;
 import com.il.henrysgrocery.domain.Product;
 import com.il.henrysgrocery.domain.discounts.AppleDiscount;
+import com.il.henrysgrocery.domain.discounts.BreadDiscount;
 import com.il.henrysgrocery.domain.discounts.Discountable;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,6 +27,7 @@ public class BasketCalculatorTest {
     public void setup() {
         discountableList = new ArrayList<>();
         discountableList.add(new AppleDiscount());
+        discountableList.add(new BreadDiscount());
         basket = new Basket();
         calculator = new BasketCalculator(discountableList);
     }
@@ -67,7 +69,7 @@ public class BasketCalculatorTest {
     @Test
     public void calculatesBasketTotalCorrectlyWithSoupAndBread() {
 
-        BigDecimal expectedTotal = new BigDecimal("3.55");
+        BigDecimal expectedTotal = new BigDecimal("3.15");
 
         BasketItem item1 = new BasketItem(Product.SOUP, 3);
         BasketItem item2 = new BasketItem(Product.BREAD, 2);
@@ -95,7 +97,7 @@ public class BasketCalculatorTest {
     @Test
     public void calculatesBasketTotalCorrectlyWithApplesSoupAndBread() {
 
-        BigDecimal expectedTotal = new BigDecimal("2.37");
+        BigDecimal expectedTotal = new BigDecimal("1.97");
 
         BasketItem item1 = new BasketItem(Product.APPLES, 3);
         BasketItem item2 = new BasketItem(Product.SOUP, 2);
