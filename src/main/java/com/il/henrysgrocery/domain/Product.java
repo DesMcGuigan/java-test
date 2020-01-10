@@ -12,8 +12,8 @@ public enum Product {
     MILK("bottle", new BigDecimal("1.30")),
     APPLES("single", new BigDecimal("0.10")),
 
-    DISCOUNTED_APPLES("single", new BigDecimal("0.09")),
-    DISCOUNTED_BREAD("loaf", new BigDecimal("0.40"));
+    APPLES_DISCOUNT("single", new BigDecimal("-0.01")),
+    BREAD_DISCOUNT("loaf", new BigDecimal("-0.40"));
 
     String unit;
     BigDecimal cost;

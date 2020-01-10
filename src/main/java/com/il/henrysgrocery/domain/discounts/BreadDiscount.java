@@ -25,14 +25,14 @@ public class BreadDiscount extends AbstractDiscount {
 
                 int actualDiscounts = Math.min(breadLoaves, discountsToApply);
 
-                basket.remove(Product.BREAD);
+//                basket.remove(Product.BREAD);
+//
+//                if (breadLoaves > actualDiscounts) {
+//                    BasketItem bread = new BasketItem(Product.BREAD, breadLoaves - actualDiscounts);
+//                    basket.add(bread);
+//                }
 
-                if (breadLoaves > actualDiscounts) {
-                    BasketItem bread = new BasketItem(Product.BREAD, breadLoaves - actualDiscounts);
-                    basket.add(bread);
-                }
-
-                BasketItem discountBread = new BasketItem(Product.DISCOUNTED_BREAD, actualDiscounts);
+                BasketItem discountBread = new BasketItem(Product.BREAD_DISCOUNT, actualDiscounts);
                 basket.add(discountBread);
 
             }

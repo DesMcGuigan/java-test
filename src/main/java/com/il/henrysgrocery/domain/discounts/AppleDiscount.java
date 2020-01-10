@@ -20,13 +20,8 @@ public class AppleDiscount extends AbstractDiscount {
             int apples = basket.getBasketItems().stream().filter(item -> item.getProduct().equals(Product.APPLES)).map(BasketItem::getQuantity).reduce(0, Integer::sum);
 
             if (apples >= 1) {
-
-                basket.remove(Product.APPLES);
-
-                BasketItem discountApples = new BasketItem(Product.DISCOUNTED_APPLES, apples);
-
+                BasketItem discountApples = new BasketItem(Product.APPLES_DISCOUNT, apples);
                 basket.add(discountApples);
-
             }
         }
         return basket;

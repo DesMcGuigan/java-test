@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class AppleDiscountTest {
 
@@ -55,12 +56,14 @@ public class AppleDiscountTest {
         Basket basket = new Basket(LocalDate.now().plusMonths(1));
         BasketItem appleItem = new BasketItem(Product.APPLES, 1);
         basket.add(appleItem);
-        BasketItem expectedDiscountItem = new BasketItem(Product.DISCOUNTED_APPLES, 1);
+        BasketItem expectedDiscountItem = new BasketItem(Product.APPLES_DISCOUNT, 1);
 
         basket = discount.apply(basket);
 
-        assertEquals(1, basket.getBasketItems().size());
-        assertEquals(expectedDiscountItem, basket.getBasketItems().get(0));
+        assertEquals(2, basket.getBasketItems().size());
+        assertTrue("Basket should contain apples", basket.getBasketItems().contains(appleItem));
+        assertTrue("Basket should contain an apples discount", basket.getBasketItems().contains(expectedDiscountItem));
+
     }
 
     @Test
@@ -68,12 +71,14 @@ public class AppleDiscountTest {
         Basket basket = new Basket(LocalDate.now().plusDays(3));
         BasketItem appleItem = new BasketItem(Product.APPLES, 1);
         basket.add(appleItem);
-        BasketItem expectedDiscountItem = new BasketItem(Product.DISCOUNTED_APPLES, 1);
+        BasketItem expectedDiscountItem = new BasketItem(Product.APPLES_DISCOUNT, 1);
 
         basket = discount.apply(basket);
 
-        assertEquals(1, basket.getBasketItems().size());
-        assertEquals(expectedDiscountItem, basket.getBasketItems().get(0));
+        assertEquals(2, basket.getBasketItems().size());
+        assertTrue("Basket should contain apples", basket.getBasketItems().contains(appleItem));
+        assertTrue("Basket should contain an apples discount", basket.getBasketItems().contains(expectedDiscountItem));
+
     }
 
     @Test
@@ -82,11 +87,12 @@ public class AppleDiscountTest {
 
         BasketItem appleItem = new BasketItem(Product.APPLES, 1);
         basket.add(appleItem);
-        BasketItem expectedDiscountItem = new BasketItem(Product.DISCOUNTED_APPLES, 1);
+        BasketItem expectedDiscountItem = new BasketItem(Product.APPLES_DISCOUNT, 1);
 
         basket = discount.apply(basket);
 
-        assertEquals(1, basket.getBasketItems().size());
-        assertEquals(expectedDiscountItem, basket.getBasketItems().get(0));
+        assertEquals(2, basket.getBasketItems().size());
+        assertTrue("Basket should contain apples", basket.getBasketItems().contains(appleItem));
+        assertTrue("Basket should contain an apples discount", basket.getBasketItems().contains(expectedDiscountItem));
     }
 }

@@ -33,12 +33,14 @@ public class BreadDiscountTest {
         basket.add(soupItem);
         BasketItem breadItem = new BasketItem(Product.BREAD, 1);
         basket.add(breadItem);
-        BasketItem expectedDiscountItem = new BasketItem(Product.DISCOUNTED_BREAD, 1);
+        BasketItem expectedDiscountItem = new BasketItem(Product.BREAD_DISCOUNT, 1);
 
         basket = discount.apply(basket);
 
-        assertEquals(2, basket.getBasketItems().size());
-        assertTrue("Basket should contain discounted bread", basket.getBasketItems().contains(expectedDiscountItem));
+        assertEquals(3, basket.getBasketItems().size());
+        assertTrue("Basket should contain bread", basket.getBasketItems().contains(breadItem));
+        assertTrue("Basket should contain soup", basket.getBasketItems().contains(soupItem));
+        assertTrue("Basket should contain a bread discount", basket.getBasketItems().contains(expectedDiscountItem));
     }
 
     @Test
@@ -48,12 +50,14 @@ public class BreadDiscountTest {
         basket.add(soupItem);
         BasketItem breadItem = new BasketItem(Product.BREAD, 1);
         basket.add(breadItem);
-        BasketItem expectedDiscountItem = new BasketItem(Product.DISCOUNTED_BREAD, 1);
+        BasketItem expectedDiscountItem = new BasketItem(Product.BREAD_DISCOUNT, 1);
 
         basket = discount.apply(basket);
 
-        assertEquals(2, basket.getBasketItems().size());
-        assertTrue("Basket should contain discounted bread", basket.getBasketItems().contains(expectedDiscountItem));
+        assertEquals(3, basket.getBasketItems().size());
+        assertTrue("Basket should contain bread", basket.getBasketItems().contains(breadItem));
+        assertTrue("Basket should contain soup", basket.getBasketItems().contains(soupItem));
+        assertTrue("Basket should contain a bread discount", basket.getBasketItems().contains(expectedDiscountItem));
     }
 
     @Test
@@ -63,12 +67,14 @@ public class BreadDiscountTest {
         basket.add(soupItem);
         BasketItem breadItem = new BasketItem(Product.BREAD, 1);
         basket.add(breadItem);
-        BasketItem expectedDiscountItem = new BasketItem(Product.DISCOUNTED_BREAD, 1);
+        BasketItem expectedDiscountItem = new BasketItem(Product.BREAD_DISCOUNT, 1);
 
         basket = discount.apply(basket);
 
-        assertEquals(2, basket.getBasketItems().size());
-        assertTrue("Basket should contain discounted bread", basket.getBasketItems().contains(expectedDiscountItem));
+        assertEquals(3, basket.getBasketItems().size());
+        assertTrue("Basket should contain bread", basket.getBasketItems().contains(breadItem));
+        assertTrue("Basket should contain soup", basket.getBasketItems().contains(soupItem));
+        assertTrue("Basket should contain a bread discount", basket.getBasketItems().contains(expectedDiscountItem));
     }
 
     @Test
@@ -78,7 +84,7 @@ public class BreadDiscountTest {
         basket.add(soupItem);
         BasketItem breadItem = new BasketItem(Product.BREAD, 1);
         basket.add(breadItem);
-        BasketItem expectedDiscountItem = new BasketItem(Product.DISCOUNTED_BREAD, 1);
+        BasketItem expectedDiscountItem = new BasketItem(Product.BREAD_DISCOUNT, 1);
 
         basket = discount.apply(basket);
 
@@ -94,7 +100,7 @@ public class BreadDiscountTest {
         basket.add(soupItem);
         BasketItem breadItem = new BasketItem(Product.BREAD, 1);
         basket.add(breadItem);
-        BasketItem expectedDiscountItem = new BasketItem(Product.DISCOUNTED_BREAD, 1);
+        BasketItem expectedDiscountItem = new BasketItem(Product.BREAD_DISCOUNT, 1);
 
         basket = discount.apply(basket);
 
