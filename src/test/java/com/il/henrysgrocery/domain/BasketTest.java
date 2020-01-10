@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 import static org.junit.Assert.assertEquals;
 
@@ -13,7 +14,7 @@ public class BasketTest {
 
     @Before
     public void setup() {
-        basket = new Basket();
+        basket = new Basket(LocalDate.now());
     }
 
     @Test

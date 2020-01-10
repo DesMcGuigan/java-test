@@ -1,6 +1,7 @@
 package com.il.henrysgrocery.domain;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +12,12 @@ import java.util.List;
 public class Basket {
 
     List<BasketItem> basketItems = new ArrayList<>();
+
+    LocalDate purchaseDate;
+
+    public Basket(LocalDate purchaseDate) {
+        this.purchaseDate = purchaseDate;
+    }
 
     public Basket add(BasketItem basketItem) {
         basketItems.add(basketItem);
@@ -28,5 +35,13 @@ public class Basket {
 
     public List<BasketItem> getBasketItems() {
         return basketItems;
+    }
+
+    public LocalDate getPurchaseDate() {
+        return purchaseDate;
+    }
+
+    public void setPurchaseDate(LocalDate purchaseDate) {
+        this.purchaseDate = purchaseDate;
     }
 }

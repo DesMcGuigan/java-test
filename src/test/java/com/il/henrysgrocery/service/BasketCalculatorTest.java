@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class BasketCalculatorTest {
         discountableList = new ArrayList<>();
         discountableList.add(new AppleDiscount());
         discountableList.add(new BreadDiscount());
-        basket = new Basket();
+        basket = new Basket(LocalDate.now());
         calculator = new BasketCalculator(discountableList);
     }
 
