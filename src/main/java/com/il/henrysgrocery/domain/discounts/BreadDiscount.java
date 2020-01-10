@@ -8,8 +8,11 @@ import java.time.LocalDate;
 
 public class BreadDiscount extends AbstractDiscount {
 
-    private LocalDate discountStart = LocalDate.now().minusDays(1);
-    private LocalDate discountEnd = LocalDate.now().plusDays(6);
+    public BreadDiscount() {
+        LocalDate yesterday = LocalDate.now().minusDays(1);
+        discountStart = yesterday;
+        discountEnd = yesterday.plusDays(7);
+    }
 
     public Basket apply(Basket basket) {
 
@@ -37,13 +40,4 @@ public class BreadDiscount extends AbstractDiscount {
         return basket;
     }
 
-    private boolean isActive(LocalDate purchaseDate) {
-
-        if ((purchaseDate.isEqual(discountStart) || purchaseDate.isAfter(discountStart)) &&
-                (purchaseDate.isEqual(discountEnd) || purchaseDate.isBefore(discountEnd))) {
-            return true;
-        }
-
-        return false;
-    }
 }

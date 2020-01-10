@@ -3,10 +3,12 @@ package com.il.henrysgrocery.domain.discounts;
 import com.il.henrysgrocery.domain.Basket;
 import com.il.henrysgrocery.domain.BasketItem;
 import com.il.henrysgrocery.domain.Product;
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
+
+import static org.junit.Assert.assertEquals;
 
 public class AppleDiscountTest {
 
@@ -20,20 +22,71 @@ public class AppleDiscountTest {
 
         basket = discount.apply(basket);
 
-        Assert.assertEquals(1, basket.getBasketItems().size());
-        Assert.assertEquals(milkItem, basket.getBasketItems().get(0));
+        assertEquals(1, basket.getBasketItems().size());
+        assertEquals(milkItem, basket.getBasketItems().get(0));
     }
 
     @Test
-    public void whenOneApplesInBasketThenBasketIsUnchanged() {
+    public void whenOneApplesInBasketBeforeOfferStartsThenBasketIsUnchanged() {
         Basket basket = new Basket(LocalDate.now());
+        BasketItem appleItem = new BasketItem(Product.APPLES, 1);
+        basket.add(appleItem);
+
+        basket = discount.apply(basket);
+
+        assertEquals(1, basket.getBasketItems().size());
+        assertEquals(appleItem, basket.getBasketItems().get(0));
+    }
+
+    @Test
+    public void whenOneApplesInBasketAfterOfferFinishesThenBasketIsUnchanged() {
+        Basket basket = new Basket(LocalDate.now().plusDays(3).plusMonths(1).with(TemporalAdjusters.lastDayOfMonth()).plusDays(1));
+        BasketItem appleItem = new BasketItem(Product.APPLES, 1);
+        basket.add(appleItem);
+
+        basket = discount.apply(basket);
+
+        assertEquals(1, basket.getBasketItems().size());
+        assertEquals(appleItem, basket.getBasketItems().get(0));
+    }
+
+    @Test
+    public void whenOneApplesInBasketThenBasketContainsDiscountItem() {
+        Basket basket = new Basket(LocalDate.now().plusMonths(1));
         BasketItem appleItem = new BasketItem(Product.APPLES, 1);
         basket.add(appleItem);
         BasketItem expectedDiscountItem = new BasketItem(Product.DISCOUNTED_APPLES, 1);
 
         basket = discount.apply(basket);
 
-        Assert.assertEquals(1, basket.getBasketItems().size());
-        Assert.assertEquals(expectedDiscountItem, basket.getBasketItems().get(0));
+        assertEquals(1, basket.getBasketItems().size());
+        assertEquals(expectedDiscountItem, basket.getBasketItems().get(0));
+    }
+
+    @Test
+    public void whenOneApplesInBasketAndPurchaseDateFirstDayOfOfferThenBasketContainsDiscountItem() {
+        Basket basket = new Basket(LocalDate.now().plusDays(3));
+        BasketItem appleItem = new BasketItem(Product.APPLES, 1);
+        basket.add(appleItem);
+        BasketItem expectedDiscountItem = new BasketItem(Product.DISCOUNTED_APPLES, 1);
+
+        basket = discount.apply(basket);
+
+        assertEquals(1, basket.getBasketItems().size());
+        assertEquals(expectedDiscountItem, basket.getBasketItems().get(0));
+    }
+
+    @Test
+    public void whenOneApplesInBasketAndPurchaseDateLastDayOfOfferThenBasketContainsDiscountItem() {
+        Basket basket = new Basket(LocalDate.now().plusDays(3).plusMonths(1).with(TemporalAdjusters.lastDayOfMonth()));
+
+        BasketItem appleItem = new BasketItem(Product.APPLES, 1);
+        basket.add(appleItem);
+        BasketItem expectedDiscountItem = new BasketItem(Product.DISCOUNTED_APPLES, 1);
+
+        basket = discount.apply(basket);
+
+        assertEquals(1, basket.getBasketItems().size());
+        assertEquals(expectedDiscountItem, basket.getBasketItems().get(0));
     }
 }

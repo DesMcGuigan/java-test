@@ -68,7 +68,7 @@ public class BasketCalculatorTest {
     }
 
     @Test
-    public void calculatesBasketTotalCorrectlyWithSoupAndBread() {
+    public void calculatesBasketTotalCorrectlyWithSoupAndBreadBoughtToday() {
 
         BigDecimal expectedTotal = new BigDecimal("3.15");
 
@@ -82,9 +82,9 @@ public class BasketCalculatorTest {
     }
 
     @Test
-    public void calculatesBasketTotalCorrectlyWithApplesAndMilk() {
+    public void calculatesBasketTotalCorrectlyWithApplesAndMilkBoughtToday() {
 
-        BigDecimal expectedTotal = new BigDecimal("1.84");
+        BigDecimal expectedTotal = new BigDecimal("1.90");
 
         BasketItem item1 = new BasketItem(Product.APPLES, 6);
         BasketItem item2 = new BasketItem(Product.MILK, 1);
@@ -96,10 +96,42 @@ public class BasketCalculatorTest {
     }
 
     @Test
-    public void calculatesBasketTotalCorrectlyWithApplesSoupAndBread() {
+    public void calculatesBasketTotalCorrectlyWithApplesSoupAndBreadBoughtToday() {
+
+        BigDecimal expectedTotal = new BigDecimal("2.00");
+
+        BasketItem item1 = new BasketItem(Product.APPLES, 3);
+        BasketItem item2 = new BasketItem(Product.SOUP, 2);
+        BasketItem item3 = new BasketItem(Product.BREAD, 1);
+
+        basket.add(item1);
+        basket.add(item2);
+        basket.add(item3);
+
+        assertEquals(expectedTotal, calculator.calculateBasket(basket));
+    }
+
+    @Test
+    public void calculatesBasketTotalCorrectlyWithApplesAndMilkBoughtInFiveDays() {
+
+        BigDecimal expectedTotal = new BigDecimal("1.84");
+
+        basket = new Basket(LocalDate.now().plusDays(5));
+        BasketItem item1 = new BasketItem(Product.APPLES, 6);
+        BasketItem item2 = new BasketItem(Product.MILK, 1);
+
+        basket.add(item1);
+        basket.add(item2);
+
+        assertEquals(expectedTotal, calculator.calculateBasket(basket));
+    }
+
+    @Test
+    public void calculatesBasketTotalCorrectlyWithApplesSoupAndBreadBoughtInFiveDays() {
 
         BigDecimal expectedTotal = new BigDecimal("1.97");
 
+        basket = new Basket(LocalDate.now().plusDays(5));
         BasketItem item1 = new BasketItem(Product.APPLES, 3);
         BasketItem item2 = new BasketItem(Product.SOUP, 2);
         BasketItem item3 = new BasketItem(Product.BREAD, 1);
