@@ -17,7 +17,7 @@ public class AppleDiscount extends AbstractDiscount {
     public Basket apply(Basket basket) {
 
         if (isActive(basket.getPurchaseDate())) {
-            int apples = basket.getBasketItems().stream().filter(item -> item.getProduct().equals(Product.APPLES)).map(BasketItem::getQuantity).reduce(0, Integer::sum);
+            int apples = basket.countItemsByProduct(Product.APPLES);
 
             if (apples >= 1) {
                 BasketItem discountApples = new BasketItem(Product.APPLES_DISCOUNT, apples);

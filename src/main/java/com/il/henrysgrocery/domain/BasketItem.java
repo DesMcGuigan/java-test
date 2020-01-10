@@ -8,8 +8,8 @@ import java.util.Objects;
  */
 public class BasketItem {
 
-    private Product product;
-    private int quantity;
+    private final Product product;
+    private final int quantity;
 
     public BasketItem(Product product, int quantity) {
         this.product = product;
@@ -20,16 +20,8 @@ public class BasketItem {
         return product;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
     public int getQuantity() {
         return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
     }
 
     @Override

@@ -2,110 +2,143 @@ package com.il.henrysgrocery.domain.discounts;
 
 import com.il.henrysgrocery.domain.Basket;
 import com.il.henrysgrocery.domain.BasketItem;
-import com.il.henrysgrocery.domain.Product;
 import org.junit.Test;
 
 import java.time.LocalDate;
 
+import static com.il.henrysgrocery.domain.Product.*;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public class BreadDiscountTest {
 
     private BreadDiscount discount = new BreadDiscount();
 
+    private Basket basket;
+
     @Test
     public void whenNoSoupInBasketThenBasketIsUnchanged() {
-        Basket basket = new Basket(LocalDate.now());
-        BasketItem breadItem = new BasketItem(Product.BREAD, 1);
+        basket = new Basket(LocalDate.now());
+        BasketItem breadItem = new BasketItem(BREAD, 1);
         basket.add(breadItem);
 
         basket = discount.apply(basket);
 
-        assertEquals(1, basket.getBasketItems().size());
-        assertEquals(breadItem, basket.getBasketItems().get(0));
+        assertEquals(1, basket.totalNumberOfItems());
+        assertEquals(1, basket.countItemsByProduct(BREAD));
     }
 
     @Test
     public void whenTwoSoupInBasketThenBasketContainsDiscountItem() {
-        Basket basket = new Basket(LocalDate.now());
-        BasketItem soupItem = new BasketItem(Product.SOUP, 2);
-        basket.add(soupItem);
-        BasketItem breadItem = new BasketItem(Product.BREAD, 1);
-        basket.add(breadItem);
-        BasketItem expectedDiscountItem = new BasketItem(Product.BREAD_DISCOUNT, 1);
+        basket = new Basket(LocalDate.now());
+        addTwoSoupsAndOneBreadToBasket();
 
         basket = discount.apply(basket);
 
-        assertEquals(3, basket.getBasketItems().size());
-        assertTrue("Basket should contain bread", basket.getBasketItems().contains(breadItem));
-        assertTrue("Basket should contain soup", basket.getBasketItems().contains(soupItem));
-        assertTrue("Basket should contain a bread discount", basket.getBasketItems().contains(expectedDiscountItem));
+        assertEquals(4, basket.totalNumberOfItems());
+        assertEquals(2, basket.countItemsByProduct(SOUP));
+        assertEquals(1, basket.countItemsByProduct(BREAD));
+        assertEquals(1, basket.countItemsByProduct(BREAD_DISCOUNT));
     }
 
     @Test
     public void whenTwoSoupInBasketAndPurchaseDateFirstDayOfOfferThenBasketContainsDiscountItem() {
-        Basket basket = new Basket(LocalDate.now().minusDays(1));
-        BasketItem soupItem = new BasketItem(Product.SOUP, 2);
-        basket.add(soupItem);
-        BasketItem breadItem = new BasketItem(Product.BREAD, 1);
-        basket.add(breadItem);
-        BasketItem expectedDiscountItem = new BasketItem(Product.BREAD_DISCOUNT, 1);
+        basket = new Basket(LocalDate.now().minusDays(1));
+        addTwoSoupsAndOneBreadToBasket();
 
         basket = discount.apply(basket);
 
-        assertEquals(3, basket.getBasketItems().size());
-        assertTrue("Basket should contain bread", basket.getBasketItems().contains(breadItem));
-        assertTrue("Basket should contain soup", basket.getBasketItems().contains(soupItem));
-        assertTrue("Basket should contain a bread discount", basket.getBasketItems().contains(expectedDiscountItem));
+        assertEquals(4, basket.totalNumberOfItems());
+        assertEquals(2, basket.countItemsByProduct(SOUP));
+        assertEquals(1, basket.countItemsByProduct(BREAD));
+        assertEquals(1, basket.countItemsByProduct(BREAD_DISCOUNT));
     }
 
     @Test
     public void whenTwoSoupInBasketAndPurchaseDateLastDayOfOfferThenBasketContainsDiscountItem() {
-        Basket basket = new Basket(LocalDate.now().plusDays(6));
-        BasketItem soupItem = new BasketItem(Product.SOUP, 2);
-        basket.add(soupItem);
-        BasketItem breadItem = new BasketItem(Product.BREAD, 1);
-        basket.add(breadItem);
-        BasketItem expectedDiscountItem = new BasketItem(Product.BREAD_DISCOUNT, 1);
+        basket = new Basket(LocalDate.now().plusDays(6));
+        addTwoSoupsAndOneBreadToBasket();
 
         basket = discount.apply(basket);
 
-        assertEquals(3, basket.getBasketItems().size());
-        assertTrue("Basket should contain bread", basket.getBasketItems().contains(breadItem));
-        assertTrue("Basket should contain soup", basket.getBasketItems().contains(soupItem));
-        assertTrue("Basket should contain a bread discount", basket.getBasketItems().contains(expectedDiscountItem));
+        assertEquals(4, basket.totalNumberOfItems());
+        assertEquals(2, basket.countItemsByProduct(SOUP));
+        assertEquals(1, basket.countItemsByProduct(BREAD));
+        assertEquals(1, basket.countItemsByProduct(BREAD_DISCOUNT));
     }
 
     @Test
     public void whenTwoSoupInBasketAndPurchaseBeforeOfferStartsThenBasketIsUnchanged() {
-        Basket basket = new Basket(LocalDate.now().minusDays(2));
-        BasketItem soupItem = new BasketItem(Product.SOUP, 2);
-        basket.add(soupItem);
-        BasketItem breadItem = new BasketItem(Product.BREAD, 1);
-        basket.add(breadItem);
-        BasketItem expectedDiscountItem = new BasketItem(Product.BREAD_DISCOUNT, 1);
+        basket = new Basket(LocalDate.now().minusDays(2));
+        addTwoSoupsAndOneBreadToBasket();
 
         basket = discount.apply(basket);
 
-        assertEquals(2, basket.getBasketItems().size());
-        assertTrue("Basket should contain bread", basket.getBasketItems().contains(breadItem));
-        assertTrue("Basket should contain soup", basket.getBasketItems().contains(soupItem));
+        assertEquals(3, basket.totalNumberOfItems());
+        assertEquals(2, basket.countItemsByProduct(SOUP));
+        assertEquals(1, basket.countItemsByProduct(BREAD));
     }
 
     @Test
     public void whenTwoSoupInBasketAndPurchaseAfterOfferEndsThenBasketIsUnchanged() {
-        Basket basket = new Basket(LocalDate.now().plusDays(7));
-        BasketItem soupItem = new BasketItem(Product.SOUP, 2);
-        basket.add(soupItem);
-        BasketItem breadItem = new BasketItem(Product.BREAD, 1);
-        basket.add(breadItem);
-        BasketItem expectedDiscountItem = new BasketItem(Product.BREAD_DISCOUNT, 1);
+        basket = new Basket(LocalDate.now().plusDays(7));
+        addTwoSoupsAndOneBreadToBasket();
 
         basket = discount.apply(basket);
 
-        assertEquals(2, basket.getBasketItems().size());
-        assertTrue("Basket should contain bread", basket.getBasketItems().contains(breadItem));
-        assertTrue("Basket should contain soup", basket.getBasketItems().contains(soupItem));
+        assertEquals(3, basket.totalNumberOfItems());
+        assertEquals(2, basket.countItemsByProduct(SOUP));
+        assertEquals(1, basket.countItemsByProduct(BREAD));
+    }
+
+    @Test
+    public void whenSixSoupInBasketThenBasketContainsDiscountItem() {
+        basket = new Basket(LocalDate.now());
+        addTwoSoupsAndOneBreadToBasket();
+        addTwoSoupsAndOneBreadToBasket();
+        addTwoSoupsAndOneBreadToBasket();
+
+        basket = discount.apply(basket);
+
+        assertEquals(12, basket.totalNumberOfItems());
+        assertEquals(6, basket.countItemsByProduct(SOUP));
+        assertEquals(3, basket.countItemsByProduct(BREAD));
+        assertEquals(3, basket.countItemsByProduct(BREAD_DISCOUNT));
+    }
+
+    @Test
+    public void whenThreeSoupInBasketThenBasketContainsDiscountItem() {
+        basket = new Basket(LocalDate.now());
+        addTwoSoupsAndOneBreadToBasket();
+        BasketItem item = new BasketItem(SOUP, 1);
+        basket.add(item);
+
+        basket = discount.apply(basket);
+
+        assertEquals(5, basket.totalNumberOfItems());
+        assertEquals(3, basket.countItemsByProduct(SOUP));
+        assertEquals(1, basket.countItemsByProduct(BREAD));
+        assertEquals(1, basket.countItemsByProduct(BREAD_DISCOUNT));
+    }
+
+    @Test
+    public void whenFourSoupInBasketAndOnlyOneBreadThenBasketContainsOneDiscountItem() {
+        basket = new Basket(LocalDate.now());
+        addTwoSoupsAndOneBreadToBasket();
+        BasketItem item = new BasketItem(SOUP, 2);
+        basket.add(item);
+
+        basket = discount.apply(basket);
+
+        assertEquals(6, basket.totalNumberOfItems());
+        assertEquals(4, basket.countItemsByProduct(SOUP));
+        assertEquals(1, basket.countItemsByProduct(BREAD));
+        assertEquals(1, basket.countItemsByProduct(BREAD_DISCOUNT));
+    }
+
+    private void addTwoSoupsAndOneBreadToBasket() {
+        BasketItem soupItem = new BasketItem(SOUP, 2);
+        basket.add(soupItem);
+        BasketItem breadItem = new BasketItem(BREAD, 1);
+        basket.add(breadItem);
     }
 }

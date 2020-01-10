@@ -2,97 +2,108 @@ package com.il.henrysgrocery.domain.discounts;
 
 import com.il.henrysgrocery.domain.Basket;
 import com.il.henrysgrocery.domain.BasketItem;
-import com.il.henrysgrocery.domain.Product;
 import org.junit.Test;
 
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
 
+import static com.il.henrysgrocery.domain.Product.*;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public class AppleDiscountTest {
 
     private AppleDiscount discount = new AppleDiscount();
 
+    private Basket basket;
+
     @Test
     public void whenNoApplesInBasketThenBasketIsUnchanged() {
-        Basket basket = new Basket(LocalDate.now());
-        BasketItem milkItem = new BasketItem(Product.MILK, 1);
+        basket = new Basket(LocalDate.now());
+        BasketItem milkItem = new BasketItem(MILK, 1);
         basket.add(milkItem);
 
         basket = discount.apply(basket);
 
-        assertEquals(1, basket.getBasketItems().size());
-        assertEquals(milkItem, basket.getBasketItems().get(0));
+        assertEquals(1, basket.totalNumberOfItems());
+        assertEquals(1, basket.countItemsByProduct(MILK));
     }
 
     @Test
     public void whenOneApplesInBasketBeforeOfferStartsThenBasketIsUnchanged() {
-        Basket basket = new Basket(LocalDate.now());
-        BasketItem appleItem = new BasketItem(Product.APPLES, 1);
-        basket.add(appleItem);
+        basket = new Basket(LocalDate.now());
+        addSingleAppleToBasket();
 
         basket = discount.apply(basket);
 
-        assertEquals(1, basket.getBasketItems().size());
-        assertEquals(appleItem, basket.getBasketItems().get(0));
+        assertEquals(1, basket.totalNumberOfItems());
+        assertEquals(1, basket.countItemsByProduct(APPLES));
     }
 
     @Test
     public void whenOneApplesInBasketAfterOfferFinishesThenBasketIsUnchanged() {
-        Basket basket = new Basket(LocalDate.now().plusDays(3).plusMonths(1).with(TemporalAdjusters.lastDayOfMonth()).plusDays(1));
-        BasketItem appleItem = new BasketItem(Product.APPLES, 1);
-        basket.add(appleItem);
+        basket = new Basket(LocalDate.now().plusDays(3).plusMonths(1).with(TemporalAdjusters.lastDayOfMonth()).plusDays(1));
+        addSingleAppleToBasket();
 
         basket = discount.apply(basket);
 
-        assertEquals(1, basket.getBasketItems().size());
-        assertEquals(appleItem, basket.getBasketItems().get(0));
+        assertEquals(1, basket.totalNumberOfItems());
+        assertEquals(1, basket.countItemsByProduct(APPLES));
     }
 
     @Test
     public void whenOneApplesInBasketThenBasketContainsDiscountItem() {
-        Basket basket = new Basket(LocalDate.now().plusMonths(1));
-        BasketItem appleItem = new BasketItem(Product.APPLES, 1);
-        basket.add(appleItem);
-        BasketItem expectedDiscountItem = new BasketItem(Product.APPLES_DISCOUNT, 1);
+        basket = new Basket(LocalDate.now().plusMonths(1));
+        addSingleAppleToBasket();
 
         basket = discount.apply(basket);
 
-        assertEquals(2, basket.getBasketItems().size());
-        assertTrue("Basket should contain apples", basket.getBasketItems().contains(appleItem));
-        assertTrue("Basket should contain an apples discount", basket.getBasketItems().contains(expectedDiscountItem));
-
+        assertEquals(2, basket.totalNumberOfItems());
+        assertEquals(1, basket.countItemsByProduct(APPLES));
+        assertEquals(1, basket.countItemsByProduct(APPLES_DISCOUNT));
     }
 
     @Test
     public void whenOneApplesInBasketAndPurchaseDateFirstDayOfOfferThenBasketContainsDiscountItem() {
-        Basket basket = new Basket(LocalDate.now().plusDays(3));
-        BasketItem appleItem = new BasketItem(Product.APPLES, 1);
-        basket.add(appleItem);
-        BasketItem expectedDiscountItem = new BasketItem(Product.APPLES_DISCOUNT, 1);
+        basket = new Basket(LocalDate.now().plusDays(3));
+        addSingleAppleToBasket();
 
         basket = discount.apply(basket);
 
-        assertEquals(2, basket.getBasketItems().size());
-        assertTrue("Basket should contain apples", basket.getBasketItems().contains(appleItem));
-        assertTrue("Basket should contain an apples discount", basket.getBasketItems().contains(expectedDiscountItem));
-
+        assertEquals(2, basket.totalNumberOfItems());
+        assertEquals(1, basket.countItemsByProduct(APPLES));
+        assertEquals(1, basket.countItemsByProduct(APPLES_DISCOUNT));
     }
 
     @Test
     public void whenOneApplesInBasketAndPurchaseDateLastDayOfOfferThenBasketContainsDiscountItem() {
-        Basket basket = new Basket(LocalDate.now().plusDays(3).plusMonths(1).with(TemporalAdjusters.lastDayOfMonth()));
-
-        BasketItem appleItem = new BasketItem(Product.APPLES, 1);
-        basket.add(appleItem);
-        BasketItem expectedDiscountItem = new BasketItem(Product.APPLES_DISCOUNT, 1);
+        basket = new Basket(LocalDate.now().plusDays(3).plusMonths(1).with(TemporalAdjusters.lastDayOfMonth()));
+        addSingleAppleToBasket();
 
         basket = discount.apply(basket);
 
-        assertEquals(2, basket.getBasketItems().size());
-        assertTrue("Basket should contain apples", basket.getBasketItems().contains(appleItem));
-        assertTrue("Basket should contain an apples discount", basket.getBasketItems().contains(expectedDiscountItem));
+        assertEquals(2, basket.totalNumberOfItems());
+        assertEquals(1, basket.countItemsByProduct(APPLES));
+        assertEquals(1, basket.countItemsByProduct(APPLES_DISCOUNT));
+    }
+
+    @Test
+    public void whenMultipleApplesInBasketThenBasketContainsMultipleDiscountItems() {
+        basket = new Basket(LocalDate.now().plusMonths(1));
+        addApplesToBasket(50000);
+
+        basket = discount.apply(basket);
+
+        assertEquals(100000, basket.totalNumberOfItems());
+        assertEquals(50000, basket.countItemsByProduct(APPLES));
+        assertEquals(50000, basket.countItemsByProduct(APPLES_DISCOUNT));
+    }
+
+    private void addSingleAppleToBasket() {
+        BasketItem appleItem = new BasketItem(APPLES, 1);
+        basket.add(appleItem);
+    }
+
+    private void addApplesToBasket(int number) {
+        basket.add(new BasketItem(APPLES, number));
     }
 }

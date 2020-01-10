@@ -96,7 +96,7 @@ public class BasketTest {
     }
 
     @Test
-    public void returnsItemCountCorrectly() {
+    public void returnsItemCountAndTotalCountCorrectly() {
         BasketItem item1 = new BasketItem(Product.APPLES, 3);
         BasketItem item2 = new BasketItem(Product.SOUP, 2);
         BasketItem item3 = new BasketItem(Product.BREAD, 1);
@@ -107,9 +107,15 @@ public class BasketTest {
         basket.add(item3);
         basket.add(item4);
 
+        assertEquals(8, basket.totalNumberOfItems());
         assertEquals(5, basket.countItemsByProduct(Product.APPLES));
         assertEquals(2, basket.countItemsByProduct(Product.SOUP));
         assertEquals(1, basket.countItemsByProduct(Product.BREAD));
         assertEquals(0, basket.countItemsByProduct(Product.MILK));
+    }
+
+    @Test
+    public void returnsTotalCountCorrectlyWhenBasketIsEmpty() {
+        assertEquals(0, basket.totalNumberOfItems());
     }
 }
