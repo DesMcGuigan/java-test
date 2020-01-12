@@ -12,7 +12,6 @@ import com.il.henrysgrocery.ui.Validator;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -41,27 +40,25 @@ public class Application {
 
         LocalDate date = LocalDate.from(DateTimeFormatter.ofPattern("yy-MM-dd").parse(dateInput));
 
-
-        System.out.println("Please enter each product in your basket followed by a quantity: ");
-
         String basketInput = application.readBasketItems(scanner, application.validator);
         Basket basket = application.createBasket(basketInput, date);
 
-        System.out.println("\nBasket Total is: " + application.calculator.calculateBasket(basket));
+        application.displayBasketTotal(application.calculator, basket);
 
     }
 
     private void displayMenu() {
+        System.out.println("================================");
         System.out.println("Welcome to Henry's Grocery Store");
         System.out.println("================================");
-        System.out.println("\n");
+        System.out.println();
         System.out.println("We currently have the following products:");
         System.out.println("Bread | Milk | Soup | Apples\n");
-        System.out.println("Please enter the date of your basket in form yy-mm-dd");
+
     }
 
     private Basket createBasket(String input, LocalDate purchaseDate) {
-        List<String> productChoices = Arrays.asList(input.split(","));
+        String[] productChoices = input.split(",");
 
         Basket basket = new Basket(purchaseDate);
 
@@ -80,11 +77,13 @@ public class Application {
 
     private String readBasketDate(Scanner scanner, Validator validator) {
 
+        System.out.println("Please enter the purchase date of your basket in form yy-MM-dd:");
+
         String dateInput = scanner.nextLine();
         if (!validator.isValidDate(dateInput)) {
 
             do {
-                System.out.println("Purchase date is invalid. Please enter a valid date in the format yy-MM-dd");
+                System.out.println("Error. Purchase date is invalid. Please enter a valid date in the format yy-MM-dd:");
                 dateInput = scanner.nextLine();
             } while (!validator.isValidDate(dateInput));
 
@@ -95,11 +94,14 @@ public class Application {
 
     private String readBasketItems(Scanner scanner, Validator validator) {
 
+        System.out.println("Please enter each product in your basket followed by a colon and then a numeric quantity. Separate each item with a comma.");
+        System.out.println("When you are finished, press the enter key:");
+
         String basketInput = scanner.nextLine();
 
         if (!validator.isValidBasket(basketInput)) {
             do {
-                System.out.println("Error. Product data is invalid. Please enter each product followed by a colon and the quantiy you wish to purchase. Separate each product with a comma.");
+                System.out.println("Error. Product items are invalid. Please enter each product followed by a colon and the quantity you wish to purchase. Separate each product with a comma.");
                 System.out.println("For Example: Enter <Bread:1, Milk:1>");
                 basketInput = scanner.nextLine();
             } while (!validator.isValidBasket(basketInput));
@@ -107,5 +109,9 @@ public class Application {
         }
 
         return basketInput;
+    }
+
+    private void displayBasketTotal(BasketCalculator calculator, Basket basket) {
+        System.out.println("\nBasket Total is: " + calculator.calculateBasket(basket));
     }
 }
