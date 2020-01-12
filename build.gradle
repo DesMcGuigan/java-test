@@ -4,6 +4,9 @@ plugins {
 }
 
 
+run {
+    standardInput = System.in
+}
 
 mainClassName = 'com.il.henrysgrocery.Application'
 
